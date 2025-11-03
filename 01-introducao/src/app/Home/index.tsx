@@ -7,7 +7,23 @@ import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.DONE, FilterStatus.PENDING];
-const ITEMS = Array.from({ length: 100 }).map((_, index) => String(index));
+const ITEMS = [
+  {
+    id: "1",
+    status: FilterStatus.DONE,
+    description: "1 pacote de café",
+  },
+  {
+    id: "2",
+    status: FilterStatus.PENDING,
+    description: "3 pacotes de macarrão",
+  },
+  {
+    id: "3",
+    status: FilterStatus.PENDING,
+    description: "3 cebolas",
+  },
+];
 
 export function Home() {
   return (
@@ -24,6 +40,7 @@ export function Home() {
           {FILTER_STATUS.map((status) => (
             <Filter key={status} status={status} isActive />
           ))}
+
           <TouchableOpacity style={styles.clearButton}>
             <Text style={styles.clearText}>Limpar</Text>
           </TouchableOpacity>
@@ -31,13 +48,19 @@ export function Home() {
 
         <FlatList
           data={ITEMS}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Item
-              data={{ status: FilterStatus.DONE, description: String(item) }}
+              data={item}
               onStatus={() => console.log("mudar o status")}
               onRemove={() => console.log("remover")}
             />
+          )}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={() => (
+            <Text style={styles.empty}>Nenhum item aqui.</Text>
           )}
         />
       </View>
